@@ -1,0 +1,15 @@
+setting_activate_export#:#Enable Export
+setting_interval#:#Interval
+setting_interval_days#:#Hours
+setting_directory#:#Export directory
+setting_directory_info#:#Write access for the web server must be given
+setting_last_export#:#Letzter Export
+setting_no_export#:#No export available
+start_export#:#Start Export
+export_completed#:#The export has been completed successfully
+subtab_configure#:#Settings
+subtab_test_list#:#Tests
+tst_table_col_exportable#:#Export Enabled
+enable_export#:#Enable Export
+title#:#LfTestExport
+cron_job_info#:#Exportiert Daten ausgewählter Tests in einem angegebenem stündlichen Interval.

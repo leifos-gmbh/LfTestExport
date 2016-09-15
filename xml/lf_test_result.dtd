@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT Test (Title, Description, Path, MarkSchema, MaxPoints, Questions, UserResults) >
+<!ATTLIST Test
+    id CDATA #REQUIRED
+>
+<!-- Test id
+    id: id is long ILIAS id. il_{NIC_ID}_tst_{OBJECT_ID}
+-->
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT Description (#PCDATA)>
+<!ELEMENT Path (#PCDATA)>
+
+<!--
+	MarkStep contains the short name of the mark step. In most cases "passed" or "failed". 
+	MarkSteps are ordered by their minimum level (required percentage of points for this step). 
+	The first step which has the element "passed = "1" contains the percentages for receiving the test passed status.
+
+
+	minimumLevel >= 0; <= 100
+	passed: 1 | 0
+-->
+<!ELEMENT MarkSchema (MarkStep*)>
+<!ELEMENT MarkStep (#PCDATA)>
+<!ATTLIST MarkStep
+	minimumLevel CDATA #REQUIRED
+	passed (1 | 0) #REQUIRED
+>
+
+
+<!-- MaxPoints
+    the maximum number of points that is reachable in the test.
+-->
+<!ELEMENT MaxPoints (#PCDATA)>
+
+<!ELEMENT Questions (Question*)>
+<!ELEMENT Question (Title, MaxPoints)>
+
+<!--
+	id integer (ILIAS question id)
+-->
+<!ATTLIST Question
+	id CDATA #REQUIRED
+>
+
+<!ELEMENT UserResults (UserResult*)>
+<!ELEMENT UserResult (Login, Firstname, Lastname, Result, UserResultQuestions)>
+<!ATTLIST UserResult
+	id CDATA #REQUIRED
+>
+
+<!ELEMENT Login (#PCDATA)>
+<!ELEMENT Firstname (#PCDATA)>
+<!ELEMENT Lastname (#PCDATA)>
+
+<!ELEMENT Result EMPTY>
+<!ATTLIST Result
+	mark CDATA #REQUIRED
+	points CDATA #REQUIRED
+>
+
+<!ELEMENT UserResultQuestions (UserResultQuestionPoints*)>
+
+<!ELEMENT UserResultQuestionPoints (#PCDATA)>
+<!ATTLIST UserResultQuestionPoints
+	qst_id CDATA #REQUIRED
+>
+
+
+
+
+
+
+
+
+
