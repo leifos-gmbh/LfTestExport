@@ -26,7 +26,7 @@ class lfTestResultExporter
 			}
 			catch(Exception $e)
 			{
-				$GLOBALS['ilLog']->write(__METHOD__.' Export failed. Invalid test id given: tst_id = '.$tst_ref_id);
+				ilLoggerFactory::getLogger('lftest')->warning('Export failed. Invalid test id given: tst_id = ' . $tst_ref_id);
 				continue;
 			}
 			$tst_obj_id = ilObject::_lookupObjId($tst_ref_id);

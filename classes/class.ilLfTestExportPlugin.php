@@ -54,19 +54,16 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
 
 	function getCronJobInstances()
 	{
-		global $ilLog;
 		$job = new lfTestExportCronJob();
 		$job->setPlugin($this);
-		$ilLog->write("getinstances new job-> ".$job->getId());
 		return array($job);
 	}
 
 	function getCronJobInstance($a_job_id)
 	{
-		global $ilLog;
 		$job = new lfTestExportCronJob();
 		$job->setPlugin($this);
-		$ilLog->write("getinstance new job-> ".$job->getId());
+		ilLoggerFactory::getLogger('lftest')->debug('new job: ' . $job->getId());
 		return 	$job;
 	}
 

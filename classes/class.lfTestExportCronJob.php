@@ -55,12 +55,10 @@ class lfTestExportCronJob extends ilCronJob
 	
 	public function run()
 	{				
-		global $ilLog;
-
-		$ilLog->write(__METHOD__.': Starting export ...');
+		ilLoggerFactory::getLogger('lftest')->info('Starting test export...');
 		$exporter = new lfTestResultExporter();
 		$exporter->export();
-		$ilLog->write(__METHOD__.': Export finished...');
+		ilLoggerFactory::getLogger('lftest')->info('Test export finished.');
 
 		$status = ilCronJobResult::STATUS_OK;
 		$result = new ilCronJobResult();
