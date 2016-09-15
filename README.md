@@ -1,6 +1,6 @@
 # LfTestExport
 
-Provides a cron job based export of test result.
+Provides a cron job based export of test results.
 
 **Minimum ILIAS Version:**
 5.1.5
