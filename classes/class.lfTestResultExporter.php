@@ -26,7 +26,8 @@ class lfTestResultExporter
 			}
 			catch(Exception $e)
 			{
-				ilLoggerFactory::getLogger('lftest')->warning('Export failed. Invalid test id given: tst_id = ' . $tst_ref_id);
+			    \ilLoggerFactory::getLogger('lftestexport')->warning($e->getMessage());
+				ilLoggerFactory::getLogger('lftestexport')->warning('Export failed. Invalid test id given: tst_id = ' . $tst_ref_id);
 				continue;
 			}
 			$tst_obj_id = ilObject::_lookupObjId($tst_ref_id);
@@ -44,9 +45,7 @@ class lfTestResultExporter
 	{
 		global $ilSetting;
 		
-		include_once './Services/Object/classes/class.ilObjectFactory.php';
-		$factory = new ilObjectFactory();
-		$tst = $factory->getInstanceByRefId($test_ref_id, FALSE);
+		$tst = \ilObjectFactory::getInstanceByRefId($test_ref_id, false);
 		if(!$tst instanceof ilObjTest)
 		{
 			throw new InvalidArgumentException('Invalid test id given');
@@ -213,7 +212,7 @@ class lfTestResultExporter
 				'WHERE active_fi = '.$ilDB->quote($active_id,'integer').' '.
 				'AND pass = '.$ilDB->quote($valid_pass,'integer');
 		$res = $ilDB->query($query);
-		while($row = $res->fetchRow(DB_FETCHMODE_OBJECT))
+		while($row = $res->fetchRow(\ilDBConstants::FETCHMODE_OBJECT))
 		{
 			$dt = new ilDateTime($row->tstamp,IL_CAL_UNIX);
 			return $dt->get(IL_CAL_FKT_DATE, 'c', ilTimeZone::UTC);

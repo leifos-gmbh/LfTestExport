@@ -11,18 +11,73 @@ include_once("./Services/Cron/classes/class.ilCronHookPlugin.php");
  */
 class ilLfTestExportPlugin extends ilCronHookPlugin
 {
+	private static $instance = null;
+
+	/**
+	 * @var string
+	 */
+	const CTYPE = 'Services';
+
+	/**
+	 * @var string
+	 */
+	const CNAME = 'Cron';
+
+	/**
+	 * @var string
+	 */
+	const SLOT_ID = 'crnhk';
+
+	/**
+	 * @var string
+	 */
+	const PNAME = 'LfTestExport';
+
+
 	private $settings = NULL;
+
+	private $logger = null;
+
+	/**get plugin instance
+	 *
+	 * @return \ilLfTestExportPlugin
+	 */
+	public static function getInstance()
+	{
+		if(!self::$instance instanceof \ilLfTestExportPlugin) {
+			self::$instance = \ilPluginAdmin::getPluginObject(
+				self::CTYPE,
+				self::CNAME,
+				self::SLOT_ID,
+				self::PNAME
+			);
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * @return |null | \ilLogger
+	 */
+	public function getLogger()
+	{
+		return $this->logger;
+	}
+
 
 	function getPluginName()
 	{
 		return "LfTestExport";
 	}
-	
+
 	/**
 	 * Init vitero
 	 */
 	protected function init()
 	{
+		global $DIC;
+
+		$this->logger = $DIC->logger()->lftestexeport();
+
 		$this->initAutoLoad();
 		$this->settings = lfTestExportSettings::getInstance();
 	}

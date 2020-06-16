@@ -27,8 +27,8 @@ class lfObjectTableGUI extends ilTable2GUI
 				
 		$this->setOrderColumn('title');
 		$this->setRowTemplate(
-				'tpl.object_table_row.html',
-				$this->getParentObject()->getPluginObject()->getDirectory()
+		    'tpl.object_table_row.html',
+            $this->getParentObject()->getPluginObject()->getDirectory()
 		);
 		
 		$this->settings = lfTestExportSettings::getInstance();

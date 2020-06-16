@@ -8,6 +8,7 @@ class lfTestExportSettings
 	private $interval = 1;
 	private $last_update = NULL;
 	private $is_exported = false;
+	private $api_key = '';
 	
 	private $storage = NULL;
 	
@@ -74,6 +75,22 @@ class lfTestExportSettings
 	{
 		$this->last_update = $dt;
 	}
+
+	public function getApiKey()
+	{
+		return $this->api_key;
+	}
+
+	public function hasApiKey()
+	{
+		return strlen($this->api_key);
+	}
+
+	public function generateApiKey()
+	{
+		$this->api_key = uniqid(CLIENT_ID . '::' , true);
+		$this->getStorage()->set('api_key', $this->api_key);
+	}
 	
 	/**
 	 * 
@@ -95,6 +112,7 @@ class lfTestExportSettings
 		$this->getStorage()->set('directory', $this->getDirectory());
 		$this->getStorage()->set('last_update',$this->getLastUpdate()->get(IL_CAL_DATETIME,'','UTC'));
 		$this->getStorage()->set('exported',$this->isExported());
+
 		return true;
 	}
 	
@@ -108,6 +126,7 @@ class lfTestExportSettings
 			$this->setLastUpdate(new ilDateTime($last_update,IL_CAL_DATETIME,'UTC'));
 		}
 		$this->setExported($this->getStorage()->get('exported',$this->isExported()));
+		$this->api_key = $this->getStorage()->get('api_key', '');
 		return true;
 	}
 	

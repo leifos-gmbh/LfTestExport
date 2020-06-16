@@ -24,6 +24,8 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 			case 'doExport':
 			case 'listTests':
 			case 'saveExport':
+			case 'generateApiKeyConfirmation':
+			case 'generateApiKey':
 				$this->$cmd();
 				break;
 
@@ -32,7 +34,6 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 
 	protected function doExport()
 	{
-	
 		$exporter = new lfTestResultExporter();
 		$exporter->export();
 		
@@ -48,16 +49,49 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 		global $tpl, $ilToolbar;
 
 		$this->showSubTabs('configure');
-		
-		
+
+		$fn = new lfTestExportFileReader();
+
 		$ilToolbar->setFormAction($GLOBALS['ilCtrl']->getFormAction($this));
 		$ilToolbar->addFormButton($this->getPluginObject()->txt('start_export'),'doExport');
+		$ilToolbar->addFormButton($this->getPluginObject()->txt('generate_api_key'), 'generateApiKeyConfirmation');
 		
 		if(!$form instanceof ilPropertyFormGUI)
 		{
 			$form = $this->initConfigurationForm();
 		}
 		$tpl->setContent($form->getHTML());
+	}
+
+	function generateApiKeyConfirmation()
+	{
+		global $DIC, $tpl;
+
+		$ctrl = $DIC->ctrl();
+		$lng = $DIC->language();
+		$main_template = $DIC->ui()->mainTemplate();
+
+		$confirm = new \ilConfirmationGUI();
+		$confirm->setHeaderText($this->getPluginObject()->txt('generate_api_key_confirm'));
+		$confirm->setFormAction($ctrl->getFormAction($this));
+		$confirm->setConfirm($this->getPluginObject()->txt('generate_api_key_confirm_btn'), 'generateApiKey');
+		$confirm->setCancel($lng->txt('cancel'), 'configure');
+
+		$tpl->setContent($confirm->getHTML());
+	}
+
+	function generateApiKey()
+	{
+		global $DIC;
+
+		$lng = $DIC->language();
+		$ctrl = $DIC->ctrl();
+
+		$setting = \lfTestExportSettings::getInstance();
+		$setting->generateApiKey();
+
+		\ilUtil::sendSuccess($lng->txt('settings_saved'),true);
+		$ctrl->redirect($this, 'configure');
 	}
 	
 	//
@@ -93,6 +127,15 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 		$dir->setSize(120);
 		$dir->setInfo($pl->txt('setting_directory_info'));
 		$form->addItem($dir);
+
+		$api_key = new \ilNonEditableValueGUI($pl->txt('settings_api_key'));
+		if (lfTestExportSettings::getInstance()->hasApiKey()) {
+			$api_key->setValue(lfTestExportSettings::getInstance()->getApiKey());
+		}
+		else {
+			$api_key->setValue($pl->txt('settings_no_api_key_generated'));
+		}
+		$form->addItem($api_key);
 
 		$last = new ilNonEditableValueGUI($pl->txt('setting_last_export'));
 		if(lfTestExportSettings::getInstance()->isExported())
