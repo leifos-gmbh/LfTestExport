@@ -1,0 +1,169 @@
+swagger: '2.0'
+info:
+  title: ilTestResultApi
+  version: '1.1'
+  contact:
+    name: Stefan Meyer
+    email: meyer@leifos.de
+  description: Test Result API
+host: localhost
+schemes:
+  - https
+produces:
+  - application/json
+  - application/xml
+consumes: []
+paths:
+  /test-results:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: integer
+          examples:
+            example:
+              - 1000
+              - 2000
+            example_empty: {}
+        '401':
+          description: Unauthorized
+          schema: {}
+          examples: {}
+      operationId: get-test-results
+      security:
+        - ilTestResult API Key: []
+      description: 'Get list of IDs of all exported tests. The IDs corresspond to ILIAS obj_id. '
+  '/test-results/{ID}/versions':
+    parameters:
+      - type: integer
+        name: ID
+        in: path
+        required: true
+        description: Test ID
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+          examples:
+            example:
+              - '20200608_1418'
+              - '20200608_1420'
+            example_empty: {}
+        '401':
+          description: Unauthorized
+          schema: {}
+          examples: {}
+        '404':
+          description: No Test Result found for version
+          schema: {}
+      operationId: get-test-results-ID-versions
+      description: "Get versions of exported tests. A version id a string of the generation date time. \nE.g \"20200608_1301\"\n"
+      security:
+        - ilTestResult API Key: []
+      parameters: []
+  '/test-results/{ID}/versions/{VERSION_ID}':
+    parameters:
+      - type: integer
+        name: ID
+        in: path
+        required: true
+        description: Test ID
+      - type: integer
+        name: VERSION_ID
+        in: path
+        required: true
+        description: Version ID
+    get:
+      summary: Your GET endpoint
+      produces:
+        - application/xml
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: file
+          headers: {}
+        '401':
+          description: Unauthorized
+          schema: {}
+        '404':
+          description: No Test Result found ID or VERSION_ID
+          schema: {}
+      operationId: get-test-results-ID-versions-VERSION_ID
+      security:
+        - ilTestResult API Key: []
+      description: Get a result version of a test
+    delete:
+      summary: ''
+      operationId: delete-test-results-ID-versions-VERSION_ID
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          schema: {}
+        '404':
+          description: Not Found
+          schema: {}
+      description: Delete Test Result export
+  '/test-results/{ID}/versions/latest':
+    parameters:
+      - type: integer
+        name: ID
+        in: path
+        required: true
+        description: Test ID
+    get:
+      summary: ''
+      operationId: get-test-results-ID-versions-latest
+      produces:
+        - application/xml
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          schema:
+            type: file
+          examples: {}
+        '401':
+          description: Unauthorized
+          schema: {}
+        '404':
+          description: Not Found
+          schema: {}
+      description: Get latest Test Result for ID
+      parameters: []
+    delete:
+      summary: ''
+      operationId: delete-test-results-ID-versions-latest
+      responses:
+        '200':
+          description: OK
+          schema: {}
+        '401':
+          description: Unauthorized
+          schema: {}
+        '404':
+          description: Not Found
+          schema: {}
+      parameters: []
+      description: Delete Test Result export
+definitions: {}
+securityDefinitions:
+  ilTestResult API Key:
+    name: il-test-result-api-key
+    type: apiKey
+    in: header
+    description: ''
+basePath: /testResultRestApi.php
