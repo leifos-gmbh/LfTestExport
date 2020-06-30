@@ -13,3 +13,7 @@ tst_table_col_exportable#:#Export Enabled
 enable_export#:#Enable Export
 title#:#LfTestExport
 cron_job_info#:#Exportiert Daten ausgewählter Tests in einem angegebenem stündlichen Interval.
+settings_api_key#:#API-Key
+generate_api_key#:#API-Key erstellen
+generate_api_key_confirm#:#Möchten Sie wirklich einen neuen API-Key erstellen? Bereits erstellte Keys verlieren dadurch ihre Gültigkeit.
+generate_api_key_confirm_btn#:#Neuen API-Key erstellen.
