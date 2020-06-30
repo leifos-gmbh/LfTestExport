@@ -151,7 +151,15 @@ class lfTestExportFileReader
      */
     protected function read()
     {
-        $ite = new \DirectoryIterator($this->settings->getDirectory());
+        $ite = null;
+        try {
+            $ite = new \DirectoryIterator($this->settings->getDirectory());
+        }
+        catch (UnexpectedValueException $e) {
+            $this->logger->warning('Configuration error: ' . $e->getMessage());
+            $this->files = [];
+            return;
+        }
         foreach ($ite as $fileInfo) {
 
             if ($fileInfo->isDot()) {
