@@ -17,3 +17,4 @@ settings_api_key#:#API-Key
 generate_api_key#:#Generate API-Key
 generate_api_key_confirm#:#Do you really want to create a new API-Key for REST-Service access? Already existing keys will be deleted.
 generate_api_key_confirm_btn#:#Generate new API-Key
+settings_no_api_key_generated#:#No API-Key generated.

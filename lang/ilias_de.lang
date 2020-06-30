@@ -17,3 +17,4 @@ settings_api_key#:#API-Key
 generate_api_key#:#API-Key erstellen
 generate_api_key_confirm#:#Möchten Sie wirklich einen neuen API-Key erstellen? Bereits erstellte Keys verlieren dadurch ihre Gültigkeit.
 generate_api_key_confirm_btn#:#Neuen API-Key erstellen.
+settings_no_api_key_generated#:#Kein API-Key vorhanden.
