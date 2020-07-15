@@ -124,7 +124,7 @@ class lfTestExportRestServer extends App
         $versions = $file_info->getFileVersions($args['ID']);
         return $response
             ->withStatus(StatusCode::HTTP_OK)
-            ->withJson(json_encode($versions));
+            ->withJson($versions);
     }
 
     public function getTestResultVersion(Request $request, Response $response, array $args)
@@ -194,7 +194,7 @@ class lfTestExportRestServer extends App
 
         return $response
             ->withStatus(StatusCode::HTTP_OK)
-            ->withJson(json_encode($file_info->getIds()));
+            ->withJson($file_info->getIds());
     }
 
     /**
