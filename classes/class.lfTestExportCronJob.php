@@ -30,7 +30,7 @@ class lfTestExportCronJob extends ilCronJob
 	
 	public function getDefaultScheduleType()
 	{
-		return self::SCHEDULE_TYPE_IN_HOURS;
+		return self::SCHEDULE_TYPE_IN_MINUTES;
 	}
 	
 	public function getDefaultScheduleValue()

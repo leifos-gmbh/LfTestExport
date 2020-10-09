@@ -1,6 +1,6 @@
 setting_activate_export#:#Enable Export
 setting_interval#:#Interval
-setting_interval_days#:#Hours
+setting_interval_days#:#Minutes
 setting_directory#:#Export directory
 setting_directory_info#:#Write access for the web server must be given
 setting_last_export#:#Letzter Export

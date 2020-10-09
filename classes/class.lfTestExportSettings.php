@@ -160,6 +160,9 @@ class lfTestExportSettings
 	{
 		$items_ser = $this->getStorage()->get('export_items', serialize(array()));
 		$items = unserialize($items_ser);
+
+
+
 		
 		return (array) $items;
 	}
