@@ -11,6 +11,9 @@ include_once("./Services/Cron/classes/class.ilCronHookPlugin.php");
  */
 class ilLfTestExportPlugin extends ilCronHookPlugin
 {
+	/**
+	 * @var ilLfTestExportPlugin|null
+	 */
 	private static $instance = null;
 
 	/**
@@ -40,9 +43,9 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
 
 	/**get plugin instance
 	 *
-	 * @return \ilLfTestExportPlugin
+	 * @return ilLfTestExportPlugin
 	 */
-	public static function getInstance()
+	public static function getInstance() : ilLfTestExportPlugin
 	{
 		if(!self::$instance instanceof \ilLfTestExportPlugin) {
 			self::$instance = \ilPluginAdmin::getPluginObject(
@@ -56,21 +59,23 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
 	}
 
 	/**
-	 * @return |null | \ilLogger
+	 * @return null | ilLogger
 	 */
-	public function getLogger()
+	public function getLogger() : ?ilLogger
 	{
 		return $this->logger;
 	}
 
-
-	function getPluginName()
+	/**
+	 * @return string
+	 */
+	function getPluginName() : string
 	{
 		return "LfTestExport";
 	}
 
 	/**
-	 * Init vitero
+	 * Init lftestexport
 	 */
 	protected function init()
 	{
@@ -101,20 +106,27 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
 	private final function autoLoad($a_classname)
 	{
 		$class_file = $this->getClassesDirectory().'/class.'.$a_classname.'.php';
-		if(@include_once($class_file))
+		if(file_exists($class_file) && include_once($class_file))
 		{
 			return;
 		}
 	}
 
-	function getCronJobInstances()
+	/**
+	 * @return lfTestExportCronJob[]
+	 */
+	function getCronJobInstances() : array
 	{
 		$job = new lfTestExportCronJob();
 		$job->setPlugin($this);
 		return array($job);
 	}
 
-	function getCronJobInstance($a_job_id)
+	/**
+	 * @param $a_job_id
+	 * @return lfTestExportCronJob
+	 */
+	function getCronJobInstance($a_job_id) : lfTestExportCronJob
 	{
 		$job = new lfTestExportCronJob();
 		$job->setPlugin($this);
@@ -123,9 +135,9 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
 	}
 
 	/**
-	 * @return lfTestResultSettings
+	 * @return lfTestExportSettings
 	 */
-	function getSettings()
+	function getSettings() : lfTestExportSettings
 	{
 		return $this->settings;
 	}

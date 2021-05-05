@@ -11,49 +11,79 @@ include_once "Services/Cron/classes/class.ilCronJob.php";
  */
 class lfTestExportCronJob extends ilCronJob
 {
-	protected $plugin; // [ilCronHookPlugin]
-	
-	public function getId()
+    /**
+     * @var ilCronHookPlugin
+     */
+    protected $plugin;
+
+    /**
+     * @return string
+     */
+    public function getId() : string
 	{
 		return "lftestexeport";
 	}
-	
-	public function getTitle()
+
+    /**
+     * @return string
+     */
+    public function getTitle() : string
 	{		
 		return $this->getPlugin()->txt("title");
 	}
-	
-	public function getDescription()
+
+    /**
+     * @return string
+     */
+    public function getDescription() : string
 	{
 		return $this->getPlugin()->txt("cron_job_info");
 	}
-	
-	public function getDefaultScheduleType()
+
+    /**
+     * @return int
+     */
+    public function getDefaultScheduleType() : int
 	{
 		return self::SCHEDULE_TYPE_IN_MINUTES;
 	}
-	
-	public function getDefaultScheduleValue()
+
+    /**
+     * @return array|int
+     */
+    public function getDefaultScheduleValue() : array|int
 	{
 		return $this->getPlugin()->getSettings()->getInterval();
 	}
-	
-	public function hasAutoActivation()
+
+    /**
+     * @return bool
+     */
+    public function hasAutoActivation()
 	{
 		return false;
 	}
-	
-	public function hasFlexibleSchedule()
+
+    /**
+     * @return bool
+     */
+    public function hasFlexibleSchedule()
 	{
 		return false;
 	}
-	
-	public function hasCustomSettings() 
+
+    /**
+     * @return bool
+     */
+    public function hasCustomSettings()
 	{
 		return false;
 	}
-	
-	public function run()
+
+    /**
+     * @return ilCronJobResult
+     */
+    public function run()
 	{				
 		ilLoggerFactory::getLogger('lftest')->info('Starting test export...');
 		$exporter = new lfTestResultExporter();
@@ -66,13 +96,19 @@ class lfTestExportCronJob extends ilCronJob
 
 		return $result;
 	}
-	
-	public function setPlugin(ilCronHookPlugin $a_plugin)
+
+    /**
+     * @param ilCronHookPlugin $a_plugin
+     */
+    public function setPlugin(ilCronHookPlugin $a_plugin)
 	{
 		$this->plugin = $a_plugin;
-	}	
-	
-	public function getPlugin()
+	}
+
+    /**
+     * @return ilCronHookPlugin
+     */
+    public function getPlugin() : ilCronHookPlugin
 	{
 		return $this->plugin;
 	}

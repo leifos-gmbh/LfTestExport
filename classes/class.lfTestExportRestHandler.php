@@ -29,12 +29,12 @@ class lfTestExportRestHandler
     private $api_key_token = '';
 
     /**
-     * @var null | \ilLogger
+     * @var null|ilLogger
      */
     private $logger = null;
 
     /**
-     * @var null | \ilCronHookPlugin
+     * @var null|ilCronHookPlugin
      */
     private $plugin = null;
 
@@ -54,9 +54,12 @@ class lfTestExportRestHandler
      */
     public function initIlias()
     {
+        global $DIC;
         $this->parseRequest();
 
-        $_COOKIE['client_id'] = $_GET['client_id'] = $this->api_key_client_id;
+        $getParams = $DIC->http()->request()->getQueryParams();
+
+        $_COOKIE['client_id'] = $getParams['client_id'] = $this->api_key_client_id;
 
         include_once './Services/Init/classes/class.ilInitialisation.php';
         include_once 'Services/Context/classes/class.ilContext.php';
@@ -90,9 +93,7 @@ class lfTestExportRestHandler
 
     public function handleRequest()
     {
-        include_once './Customizing/global/plugins/Services/Cron/CronHook/LfTestExport/lib/vendor/autoload.php';
-
-        $server = new \lfTestExportRestServer($this->api_key);
+        $server = new lfTestExportRestServer($this->api_key);
         $server->init();
         $server->run();
     }

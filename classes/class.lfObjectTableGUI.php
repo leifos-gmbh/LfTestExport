@@ -11,16 +11,23 @@ include_once './Services/Table/classes/class.ilTable2GUI.php';
  */
 class lfObjectTableGUI extends ilTable2GUI
 {
-	protected $settings = null;
-	protected $objects = array();
+    /**
+     * @var lfTestExportSettings|null
+     */
+    protected $settings = null;
+
+    /**
+     * @var array
+     */
+    protected $objects = array();
 	
 	/**
 	 * Constructor
-	 * @param type $a_parent_obj
-	 * @param type $a_parent_cmd
-	 * @param type $a_id
+	 * @param object $a_parent_obj
+	 * @param string $a_parent_cmd
+	 * @param string $a_id
 	 */
-	public function __construct($a_parent_obj, $a_parent_cmd, $a_id)
+	public function __construct(object $a_parent_obj, string $a_parent_cmd, string $a_id)
 	{
 		$this->setId('obj_table_'.$a_id);
 		parent::__construct($a_parent_obj, $a_parent_cmd, '');
@@ -36,20 +43,25 @@ class lfObjectTableGUI extends ilTable2GUI
 	
 	/**
 	 * Get settings object
-	 * @return lfExportSettings
+	 * @return lfTestExportSettings
 	 */
-	public function getSettings()
+	public function getSettings() : lfTestExportSettings
 	{
 		return $this->settings;
 	}
-	
-	
-	public function setObjects($a_ref_ids)
+
+    /**
+     * @param array $a_ref_ids
+     */
+    public function setObjects(array $a_ref_ids)
 	{
 		$this->objects = $a_ref_ids;
 	}
-	
-	public function getObjects()
+
+    /**
+     * @return array
+     */
+    public function getObjects() : array
 	{
 		return $this->objects;
 	}
@@ -82,7 +94,7 @@ class lfObjectTableGUI extends ilTable2GUI
 		if($this->getSettings()->isItemExported($set['ref_id']))
 		{
 			$this->tpl->setVariable('VAL_CHECKED','checked="checked"');
-			$this->tpl->setVariable('EXPORT_IMG',ilUtil::getImagePath('icon_ok.png'));
+			$this->tpl->setVariable('EXPORT_IMG',ilUtil::getImagePath('icon_ok.svg'));
 			
 		}
 		else

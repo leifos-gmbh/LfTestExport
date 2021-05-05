@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\LazyOpenStream;
 class lfTestExportRestServer extends App
 {
     /**
-     * @var \ilLogger |null
+     * @var ilLogger|null
      */
     private $logger = null;
 
@@ -28,16 +28,15 @@ class lfTestExportRestServer extends App
      */
     private $api_key = '';
 
-
-
     /**
      * lfTestExportRestServer constructor.
-     * @param array $container
+     * @param string $api_key
+     * @param array  $container
      */
-    public function __construct(string  $api_key, $container = [])
+    public function __construct(string  $api_key, array $container = [])
     {
         $this->api_key = $api_key;
-        $this->plugin = \ilLfTestExportPlugin::getInstance();
+        $this->plugin = ilLfTestExportPlugin::getInstance();
         $this->logger = $this->plugin->getLogger();
         $this->settings = $this->plugin->getSettings();
 
@@ -60,13 +59,16 @@ class lfTestExportRestServer extends App
     }
 
     /**
-     *
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     * @return Response
      */
-    public function getLatestTestResultVersion(Request $request, Response $response, array $args)
+    public function getLatestTestResultVersion(Request $request, Response $response, array $args) : Response
     {
         $this->logger->info('Called get latest test result version.');
 
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
         $version_id = $file_info->getLatestVersion($args['ID']);
 
         return $this->getTestResultVersion(
@@ -85,11 +87,11 @@ class lfTestExportRestServer extends App
      * @param array    $args
      * @return Response
      */
-    public function deleteLatestTestResultVersion(Request $request, Response $response, array $args)
+    public function deleteLatestTestResultVersion(Request $request, Response $response, array $args) : Response
     {
         $this->logger->info('Called delete latest test result version.');
 
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
         $version_id = $file_info->getLatestVersion($args['ID']);
 
         return $this->deleteTestResultVersion(
@@ -106,15 +108,17 @@ class lfTestExportRestServer extends App
     /**
      * @param Request  $request
      * @param Response $response
+     * @param array    $args
+     * @return Response
      */
-    public function getTestResultVersions(Request $request, Response $response, array $args)
+    public function getTestResultVersions(Request $request, Response $response, array $args) : Response
     {
         $this->logger->info('Called get  test result versions.');
 
         if (!$this->isAuthenticated($request, $response)) {
             return $response;
         }
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
 
         if (!$file_info->idExists($args['ID'])) {
             $this->logger->warning('Invalid file id given: ' . $args['ID']);
@@ -127,14 +131,20 @@ class lfTestExportRestServer extends App
             ->withJson($versions);
     }
 
-    public function getTestResultVersion(Request $request, Response $response, array $args)
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     * @return Response
+     */
+    public function getTestResultVersion(Request $request, Response $response, array $args) : Response
     {
         $this->logger->info('Called get test result version.');
         if (!$this->isAuthenticated($request, $response)) {
             return $response;
         }
 
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
 
         if (!$file_info->idExists($args['ID'])) {
             $this->logger->warning('Invalid file id given: ' . $args['ID']);
@@ -154,14 +164,20 @@ class lfTestExportRestServer extends App
             ->withBody($stream);
     }
 
-    public function deleteTestResultVersion(Request $request, Response $response, array $args)
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     * @return Response
+     */
+    public function deleteTestResultVersion(Request $request, Response $response, array $args) : Response
     {
         $this->logger->info('Called delete test result version.');
         if (!$this->isAuthenticated($request, $response)) {
             return $response;
         }
 
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
 
         if (!$file_info->idExists($args['ID'])) {
             $this->logger->warning('Invalid file id given: ' . $args['ID']);
@@ -183,14 +199,14 @@ class lfTestExportRestServer extends App
      * @param Response $response
      * @return Response
      */
-    public function getTestResults(Request $request, Response $response)
+    public function getTestResults(Request $request, Response $response) : Response
     {
         $this->logger->info('Called get test results.');
         if (!$this->isAuthenticated($request, $response)) {
             return $response;
         }
 
-        $file_info = new \lfTestExportFileReader();
+        $file_info = new lfTestExportFileReader();
 
         return $response
             ->withStatus(StatusCode::HTTP_OK)
@@ -202,7 +218,7 @@ class lfTestExportRestServer extends App
      * @param Response $response
      * @return bool
      */
-    private function isAuthenticated(Request $request, Response &$response)
+    private function isAuthenticated(Request $request, Response &$response) : bool
     {
         $api_key = $this->settings->getApiKey();
 

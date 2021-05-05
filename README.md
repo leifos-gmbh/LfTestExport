@@ -3,10 +3,10 @@
 Provides a cron job based export of test results.
 
 **Minimum ILIAS Version:**
-5.1.5
+6.0.0
 
 **Maximum ILIAS Version:**
-5.1.999
+6.9.999
 
 **Responsible Developer:**
 Stefan Meyer - meyer AT leifos.com

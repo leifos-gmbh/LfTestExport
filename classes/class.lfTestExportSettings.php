@@ -96,7 +96,7 @@ class lfTestExportSettings
 	 * 
 	 * @return ilDateTime
 	 */
-	public function getLastUpdate()
+	public function getLastUpdate() : ilDateTime
 	{
 		if(!$this->last_update instanceof ilDateTime)
 		{
@@ -105,8 +105,11 @@ class lfTestExportSettings
 		}
 		return $this->last_update;
 	}
-	
-	public function save()
+
+	/**
+	 * @return bool
+	 */
+	public function save() : bool
 	{
 		$this->getStorage()->set('interval', $this->getInterval());
 		$this->getStorage()->set('directory', $this->getDirectory());
@@ -115,9 +118,16 @@ class lfTestExportSettings
 
 		return true;
 	}
-	
-	protected function read()
+
+	/**
+	 * @return bool
+	 * @throws ilDateTimeException
+	 */
+	protected function read() : bool
 	{
+		global $DIC;
+
+		$DIC->logger()->usr()->dump($this->getStorage()->get('directory'));
 		$this->setInterval($this->getStorage()->get('interval',$this->getInterval()));
 		$this->setDirectory($this->getStorage()->get('directory',$this->getDirectory()));
 		$last_update = $this->getStorage()->get('last_update', 0);

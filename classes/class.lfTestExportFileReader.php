@@ -2,21 +2,34 @@
 
 class lfTestExportFileReader
 {
+    /**
+     * @var ilLogger|null
+     */
     private $logger = null;
+
+    /**
+     * @var lfTestExportSettings|null
+     */
     private $settings = null;
 
+    /**
+     * @var array
+     */
     private $files = [];
 
 
     public function __construct()
     {
-        $this->settings = \lfTestExportSettings::getInstance();
-        $this->logger = \ilLfTestExportPlugin::getInstance()->getLogger();
+        $this->settings = lfTestExportSettings::getInstance();
+        $this->logger = ilLfTestExportPlugin::getInstance()->getLogger();
 
         $this->read();
     }
 
-    public function getIds()
+    /**
+     * @return array
+     */
+    public function getIds() : array
     {
         return array_keys($this->files);
     }
@@ -126,7 +139,11 @@ class lfTestExportFileReader
         return null;
     }
 
-    public function getFileVersions(int $file_id)
+    /**
+     * @param int $file_id
+     * @return array
+     */
+    public function getFileVersions(int $file_id) : array
     {
         if (!$this->idExists($file_id)) {
             $this->logger->warning('Cannot find file with id: ' . $file_id);
@@ -146,14 +163,11 @@ class lfTestExportFileReader
         return $file_versions;
     }
 
-    /**
-     *
-     */
     protected function read()
     {
         $ite = null;
         try {
-            $ite = new \DirectoryIterator($this->settings->getDirectory());
+            $ite = new DirectoryIterator($this->settings->getDirectory());
         }
         catch (UnexpectedValueException $e) {
             $this->logger->warning('Configuration error: ' . $e->getMessage());

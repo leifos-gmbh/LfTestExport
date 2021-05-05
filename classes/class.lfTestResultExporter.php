@@ -6,8 +6,11 @@
  */
 class lfTestResultExporter
 {
-	
-	private $settings = NULL;
+
+    /**
+     * @var lfTestExportSettings|null
+     */
+    private $settings = NULL;
 	
 	/**
 	 * Constructor
@@ -26,7 +29,7 @@ class lfTestResultExporter
 			}
 			catch(Exception $e)
 			{
-			    \ilLoggerFactory::getLogger('lftestexport')->warning($e->getMessage());
+			    ilLoggerFactory::getLogger('lftestexport')->warning($e->getMessage());
 				ilLoggerFactory::getLogger('lftestexport')->warning('Export failed. Invalid test id given: tst_id = ' . $tst_ref_id);
 				continue;
 			}
@@ -40,18 +43,23 @@ class lfTestResultExporter
 			
 		}
 	}
-	
-	protected function exportItem($test_ref_id)
+
+    /**
+     * @param int $test_ref_id
+     * @return string
+     * @throws ilDatabaseException
+     * @throws ilObjectNotFoundException
+     */
+    protected function exportItem(int $test_ref_id) : string
 	{
 		global $ilSetting;
 		
-		$tst = \ilObjectFactory::getInstanceByRefId($test_ref_id, false);
+		$tst = ilObjectFactory::getInstanceByRefId($test_ref_id, false);
 		if(!$tst instanceof ilObjTest)
 		{
 			throw new InvalidArgumentException('Invalid test id given');
 		}
-		
-		include_once './Services/Xml/classes/class.ilXmlWriter.php';
+
 		$writer = new ilXmlWriter();
 
 		$il_id = "il_".$ilSetting->get('inst_id')."_tst_".$tst->getId();
@@ -86,13 +94,11 @@ class lfTestResultExporter
 		$num_questions = 0;
 		foreach($this->getQuestions($tst) as $qst_id)
 		{
-			include_once './Modules/TestQuestionPool/classes/class.assQuestion.php';
 			$max_points += assQuestion::_getMaximumPoints($qst_id);
 			$num_questions++;
 		}
 		if($num_questions)
 		{
-			include_once './Modules/Test/classes/class.ilTestRandomQuestionSetConfig.php';
 			$max_points = ($max_points / $num_questions) * $tst->getQuestionCount();
 		}
 		else
@@ -107,7 +113,7 @@ class lfTestResultExporter
 		foreach($this->getQuestions($tst) as $qst_id)
 		{
 			// @var assQuestion
-			$qst = ilObjTest::_instanciateQuestion($qst_id);
+			$qst = assQuestion::_instantiateQuestion($qst_id);
 			$writer->xmlStartTag('Question',array('id' => $qst->getId()));
 			$writer->xmlElement('Title',array(),$qst->getTitle());
 			$writer->xmlElement('MaxPoints',array(),$qst->getMaximumPoints());
@@ -185,7 +191,11 @@ class lfTestResultExporter
 		return $writer->xmlDumpMem(FALSE);
 	}
 
-	protected function getQuestions(ilObjTest $tst)
+    /**
+     * @param ilObjTest $tst
+     * @return array
+     */
+    protected function getQuestions(ilObjTest $tst) : array
 	{
 		$qsts = array();
 		foreach($tst->getParticipants() as $active_id => $tmp)
@@ -195,9 +205,15 @@ class lfTestResultExporter
 		}
 		return $qsts;
 	}
-	
-	protected function readPassTimestamp($a_usr_id, ilObjTest $tst)
-	{
+
+    /**
+     * @param           $a_usr_id
+     * @param ilObjTest $tst
+     * @return array|int|string
+     * @throws ilDateTimeException
+     */
+    protected function readPassTimestamp($a_usr_id, ilObjTest $tst)
+    {
 		global $ilDB;
 		
 		$active_id = $tst->getActiveIdOfUser($a_usr_id);
@@ -220,24 +236,23 @@ class lfTestResultExporter
 		return '';
 	}
 
-
-	/**
-	 * @return lfTestResultSettings
-	 */
+    /**
+     * @return lfTestResultSettings|lfTestExportSettings|null
+     */
 	protected function getSettings()
-	{
+    {
 		return $this->settings;
 	}
 
 	/**
 	 * returns a "<" separated path string
 	 *
-	 * @param $start int ref_id
-	 * @param $end int re_id
+	 * @param int $start ref_id
+	 * @param int $end ref_id
 	 * @return string path
 	 */
-	protected function getPath($start, $end)
-	{
+	protected function getPath(int $start, int $end) : string
+    {
 		global $lng, $tree;
 
 		$path_ids = $tree->getPathId($end, $start);

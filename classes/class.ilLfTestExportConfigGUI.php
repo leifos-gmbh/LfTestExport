@@ -1,7 +1,5 @@
 <?php
 
-include_once("./Services/Component/classes/class.ilPluginConfigGUI.php");
- 
 /**
  * News block configuration user interface class
  *
@@ -12,10 +10,30 @@ include_once("./Services/Component/classes/class.ilPluginConfigGUI.php");
 class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 {
 	/**
+	 * @var ilLanguage
+	 */
+	private $lng;
+
+	/**
+	 * @var ilCtrl
+	 */
+	private $ctrl;
+
+	/**
+	 * @var ilTemplate
+	 */
+	private $tpl;
+
+	/**
 	* Handles all commmands, default is "configure"
 	*/
 	function performCommand($cmd)
 	{
+		global $DIC;
+
+		$this->lng = $DIC->language();
+		$this->ctrl = $DIC->ctrl();
+		$this->tpl = $DIC->ui()->mainTemplate();
 		
 		switch ($cmd)
 		{
@@ -38,60 +56,58 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 		$exporter->export();
 		
 		ilUtil::sendSuccess($this->getPluginObject()->txt('export_completed'),true);
-		$GLOBALS['ilCtrl']->redirect($this,'configure');
+		$this->ctrl->redirect($this,'configure');
 	}
 
 	/**
 	 * Configure screen
+	 *
+	 * @param ilPropertyFormGUI|null $form
 	 */
 	function configure(ilPropertyFormGUI $form = NULL)
 	{
-		global $tpl, $ilToolbar;
+		global $DIC;
+		$ilToolbar = $DIC->toolbar();
 
 		$this->showSubTabs('configure');
 
-		$fn = new lfTestExportFileReader();
+		$ilToolbar->setFormAction($this->ctrl->getFormAction($this));
 
-		$ilToolbar->setFormAction($GLOBALS['ilCtrl']->getFormAction($this));
-		$ilToolbar->addFormButton($this->getPluginObject()->txt('start_export'),'doExport');
-		$ilToolbar->addFormButton($this->getPluginObject()->txt('generate_api_key'), 'generateApiKeyConfirmation');
+		$button = ilLinkButton::getInstance();
+		$button->setCaption($this->getPluginObject()->txt('start_export'), false);
+		$button->setUrl($this->ctrl->getLinkTarget($this, "doExport"));
+		$ilToolbar->addButtonInstance($button);
+
+		$button = ilLinkButton::getInstance();
+		$button->setCaption($this->getPluginObject()->txt('generate_api_key'), false);
+		$button->setUrl($this->ctrl->getLinkTarget($this, "generateApiKeyConfirmation"));
+		$ilToolbar->addButtonInstance($button);
 		
 		if(!$form instanceof ilPropertyFormGUI)
 		{
 			$form = $this->initConfigurationForm();
 		}
-		$tpl->setContent($form->getHTML());
+		$this->tpl->setContent($form->getHTML());
 	}
 
 	function generateApiKeyConfirmation()
 	{
-		global $DIC, $tpl;
-
-		$ctrl = $DIC->ctrl();
-		$lng = $DIC->language();
-		$main_template = $DIC->ui()->mainTemplate();
-
-		$confirm = new \ilConfirmationGUI();
+		$confirm = new ilConfirmationGUI();
 		$confirm->setHeaderText($this->getPluginObject()->txt('generate_api_key_confirm'));
-		$confirm->setFormAction($ctrl->getFormAction($this));
+		$confirm->setFormAction($this->ctrl->getFormAction($this));
 		$confirm->setConfirm($this->getPluginObject()->txt('generate_api_key_confirm_btn'), 'generateApiKey');
-		$confirm->setCancel($lng->txt('cancel'), 'configure');
+		$confirm->setCancel($this->lng->txt('cancel'), 'configure');
 
-		$tpl->setContent($confirm->getHTML());
+		$this->tpl->setContent($confirm->getHTML());
 	}
 
 	function generateApiKey()
 	{
-		global $DIC;
-
-		$lng = $DIC->language();
-		$ctrl = $DIC->ctrl();
-
-		$setting = \lfTestExportSettings::getInstance();
+		$setting = lfTestExportSettings::getInstance();
 		$setting->generateApiKey();
 
-		\ilUtil::sendSuccess($lng->txt('settings_saved'),true);
-		$ctrl->redirect($this, 'configure');
+		\ilUtil::sendSuccess($this->lng->txt('settings_saved'),true);
+		$this->ctrl->redirect($this, 'configure');
 	}
 	
 	//
@@ -102,15 +118,12 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 	/**
 	 * Init configuration form.
 	 *
-	 * @return object form object
+	 * @return ilPropertyFormGUI
 	 */
-	public function initConfigurationForm()
+	public function initConfigurationForm() : ilPropertyFormGUI
 	{
-		global $lng, $ilCtrl;
-		
 		$pl = $this->getPluginObject();
-	
-		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
+
 		$form = new ilPropertyFormGUI();
 		
 		$interval = new ilNumberInputGUI($pl->txt('setting_interval'),'interval');
@@ -149,9 +162,9 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 		$form->addItem($last);
 		
 		
-		$form->addCommandButton('save', $lng->txt('save'));
+		$form->addCommandButton('save', $this->lng->txt('save'));
 		
-		$form->setFormAction($ilCtrl->getFormAction($this));
+		$form->setFormAction($this->ctrl->getFormAction($this));
 		
 		return $form;
 	}
@@ -162,8 +175,6 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 	 */
 	public function save()
 	{
-		global $tpl, $lng, $ilCtrl;
-	
 		$pl = $this->getPluginObject();
 		
 		$form = $this->initConfigurationForm();
@@ -174,12 +185,12 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 			lfTestExportSettings::getInstance()->setDirectory($form->getInput('directory'));
 			lfTestExportSettings::getInstance()->save();
 			
-			ilUtil::sendSuccess($lng->txt("settings_saved"), true);
-			$ilCtrl->redirect($this, "configure");
+			ilUtil::sendSuccess($this->lng->txt("settings_saved"), true);
+			$this->ctrl->redirect($this, "configure");
 		}
 		else
 		{
-			ilUtil::sendFailure($lng->txt('err_check_input'));
+			ilUtil::sendFailure($this->lng->txt('err_check_input'));
 			$form->setValuesByPost();
 			$this->configure($form);
 		}
@@ -187,7 +198,7 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 	
 	protected function listTests()
 	{
-		global $tpl;
+		global $DIC;
 
 		$this->showSubTabs('tests');
 		
@@ -195,10 +206,10 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 		$table->setFormAction($GLOBALS['ilCtrl']->getFormAction($this));
 		$table->init();				
 		$table->setObjects(
-				ilUtil::_getObjectsByOperations('tst', 'write',$GLOBALS['ilUser']->getId(),-1)
+				ilUtil::_getObjectsByOperations('tst', 'write',$DIC->user()->getId(),-1)
 		);
 		$table->parse();
-		$tpl->setContent($table->getHTML());
+		$this->tpl->setContent($table->getHTML());
 	}
 	
 	
@@ -223,12 +234,14 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
 				}
 			}
 		}
-		ilUtil::sendSuccess($GLOBALS['lng']->txt('settings_saved'),true);
-		$GLOBALS['ilCtrl']->redirect($this,'listTests');
+		ilUtil::sendSuccess($this->lng->txt('settings_saved'),true);
+		$this->ctrl->redirect($this,'listTests');
 	}
 
-
-	protected function showSubTabs($a_active = '')
+	/**
+	 * @param string $a_active
+	 */
+	protected function showSubTabs(string $a_active = '')
 	{
 		global $ilTabs;
 		
