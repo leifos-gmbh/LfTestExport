@@ -51,7 +51,6 @@ class lfTestExportFileReader
             return false;
         }
         foreach ($this->files[$file_id] as $spl_file) {
-
             $fn = (string) $file_id . '_' . $a_version_id . '.xml';
             $this->logger->info($fn);
             if ($spl_file->getFilename() == $fn) {
@@ -72,7 +71,6 @@ class lfTestExportFileReader
             return true;
         }
         foreach ($this->files[$file_id] as $spl_file) {
-
             $fn = (string) $file_id . '_' . $a_version_id . '.xml';
             if ($spl_file->getFilename() !== $fn) {
                 continue;
@@ -129,7 +127,6 @@ class lfTestExportFileReader
             return null;
         }
         foreach ($this->files[$file_id] as $spl_file) {
-
             $fn = (string) $file_id . '_' . $a_version_id . '.xml';
             $this->logger->info($fn);
             if ($spl_file->getFilename() == $fn) {
@@ -150,8 +147,7 @@ class lfTestExportFileReader
             return [];
         }
         $file_versions = [];
-        foreach ($this->files[$file_id] as $spl_file)
-        {
+        foreach ($this->files[$file_id] as $spl_file) {
             $matches = [];
             $this->logger->info($spl_file->getFilename());
             if (preg_match('/[0-9]+_([0-9]{8}_[0-9]{4})\.xml/', $spl_file->getFilename(), $matches) === 1) {
@@ -168,14 +164,12 @@ class lfTestExportFileReader
         $ite = null;
         try {
             $ite = new DirectoryIterator($this->settings->getDirectory());
-        }
-        catch (UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             $this->logger->warning('Configuration error: ' . $e->getMessage());
             $this->files = [];
             return;
         }
         foreach ($ite as $fileInfo) {
-
             if ($fileInfo->isDot()) {
                 continue;
             }
@@ -184,11 +178,9 @@ class lfTestExportFileReader
 
             $filename = $fileInfo->getFilename();
             if (preg_match('/[0-9]+_[0-9]{8}_[0-9]{4}\.xml/', $filename) === 1) {
-
                 $file_parts = explode('_', basename($filename, '.xml'));
                 $this->files[$file_parts[0]][] = new SplFileObject($fileInfo->getPathname());
             }
-
         }
     }
 }

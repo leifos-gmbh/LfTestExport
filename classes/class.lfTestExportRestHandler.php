@@ -45,7 +45,6 @@ class lfTestExportRestHandler
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -80,7 +79,6 @@ class lfTestExportRestHandler
          */
         $admin = $DIC['ilPluginAdmin'];
         foreach ($admin->getActivePluginsForSlot(IL_COMP_SERVICE, 'Cron', 'crnhk') as $plugin_name) {
-
             if ($plugin_name == self::PLUGIN_TEST_EXPORT) {
                 $this->plugin = $admin->getPluginObject(IL_COMP_SERVICE, 'Cron', 'crnhk', $plugin_name);
             }

@@ -10,8 +10,7 @@ try {
     $rest_handler->initIlias();
     $rest_handler->initPlugin();
     $rest_handler->handleRequest();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
     header('HTTP/1.1 401 Unauthorized');
     print_r($_SERVER);
     print_r($e->getMessage());

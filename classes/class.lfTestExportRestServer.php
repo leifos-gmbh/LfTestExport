@@ -158,7 +158,7 @@ class lfTestExportRestServer extends App
 
         $file = $file_info->getFile($args['ID'], $args['VERSION_ID']);
 
-        $stream = new LazyOpenStream($file->getPathname(),'r');
+        $stream = new LazyOpenStream($file->getPathname(), 'r');
         return $response
             ->withHeader('Content-Type', 'application/xml')
             ->withBody($stream);
@@ -229,6 +229,4 @@ class lfTestExportRestServer extends App
         $response = $response->withStatus(StatusCode::HTTP_UNAUTHORIZED);
         return false;
     }
-
-
 }

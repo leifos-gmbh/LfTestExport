@@ -14,5 +14,3 @@ $ilias_max_version = "6.9.999";
 // optional, but useful: Add one or more responsible persons and a contact email
 $responsible = "Stefan Meyer";
 $responsible_mail = "meyer@leifos.com";
-
-?>
