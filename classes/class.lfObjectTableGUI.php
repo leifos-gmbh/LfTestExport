@@ -83,8 +83,7 @@ class lfObjectTableGUI extends ilTable2GUI
     public function fillRow($set)
     {
         $this->tpl->setVariable('VAL_ID', $set['ref_id']);
-        
-        include_once './Services/Link/classes/class.ilLink.php';
+
         $this->tpl->setVariable('OBJ_LINK', ilLink::_getLink($set['ref_id'], $set['type']));
         $this->tpl->setVariable('OBJ_LINKED_TITLE', $set['title']);
         $this->tpl->setVariable('TYPE_IMG', ilUtil::getTypeIconPath($set['type'], $set['obj_id']));

@@ -34,18 +34,22 @@ class lfTestExportFileReader
         return array_keys($this->files);
     }
 
-    public function idExists(int $file_id) : bool
+    /**
+     * @param string $file_id
+     * @return bool
+     */
+    public function idExists(string $file_id) : bool
     {
         $this->logger->dump($this->files);
         return array_key_exists($file_id, $this->files);
     }
 
     /**
-     * @param int    $file_id
+     * @param string $file_id
      * @param string $a_version_id
      * @return bool
      */
-    public function versionIdExists(int $file_id, string $a_version_id) : bool
+    public function versionIdExists(string $file_id, string $a_version_id) : bool
     {
         if (!$this->idExists($file_id)) {
             return false;
@@ -61,11 +65,11 @@ class lfTestExportFileReader
     }
 
     /**
-     * @param int    $file_id
+     * @param string $file_id
      * @param string $a_version_id
      * @return bool
      */
-    public function deleteVersion(int $file_id, string $a_version_id) : bool
+    public function deleteVersion(string $file_id, string $a_version_id) : bool
     {
         if (!$this->versionIdExists($file_id, $a_version_id)) {
             return true;
@@ -85,10 +89,10 @@ class lfTestExportFileReader
     }
 
     /**
-     * @param int $file_id
+     * @param string $file_id
      * @return string
      */
-    public function getLatestVersion(int $file_id) : string
+    public function getLatestVersion(string $file_id) : string
     {
         if (!$this->idExists($file_id)) {
             $this->logger->warning('Cannot find file with id: ' . $file_id);
@@ -117,11 +121,11 @@ class lfTestExportFileReader
     }
 
     /**
-     * @param int    $file_id
+     * @param string $file_id
      * @param string $a_version_id
      * @return SplFileObject|null
      */
-    public function getFile(int $file_id, string $a_version_id) : ?SplFileObject
+    public function getFile(string $file_id, string $a_version_id) : ?SplFileObject
     {
         if (!$this->versionIdExists($file_id, $a_version_id)) {
             return null;
@@ -137,10 +141,10 @@ class lfTestExportFileReader
     }
 
     /**
-     * @param int $file_id
+     * @param string $file_id
      * @return array
      */
-    public function getFileVersions(int $file_id) : array
+    public function getFileVersions(string $file_id) : array
     {
         if (!$this->idExists($file_id)) {
             $this->logger->warning('Cannot find file with id: ' . $file_id);

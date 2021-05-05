@@ -25,15 +25,22 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
     private $tpl;
 
     /**
-    * Handles all commmands, default is "configure"
-    */
-    public function performCommand($cmd)
+     * ilLfTestExportConfigGUI constructor.
+     */
+    public function __construct()
     {
         global $DIC;
 
         $this->lng = $DIC->language();
         $this->ctrl = $DIC->ctrl();
         $this->tpl = $DIC->ui()->mainTemplate();
+    }
+
+    /**
+    * Handles all commmands, default is "configure"
+    */
+    public function performCommand($cmd)
+    {
         
         switch ($cmd) {
             case "configure":
@@ -104,7 +111,7 @@ class ilLfTestExportConfigGUI extends ilPluginConfigGUI
         $setting = lfTestExportSettings::getInstance();
         $setting->generateApiKey();
 
-        \ilUtil::sendSuccess($this->lng->txt('settings_saved'), true);
+        ilUtil::sendSuccess($this->lng->txt('settings_saved'), true);
         $this->ctrl->redirect($this, 'configure');
     }
     

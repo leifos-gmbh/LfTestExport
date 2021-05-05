@@ -103,7 +103,7 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
      *
      * @param string class name
      */
-    final private function autoLoad($a_classname)
+    private function autoLoad(string $a_classname)
     {
         $class_file = $this->getClassesDirectory() . '/class.' . $a_classname . '.php';
         if (file_exists($class_file) && include_once($class_file)) {
@@ -122,7 +122,7 @@ class ilLfTestExportPlugin extends ilCronHookPlugin
     }
 
     /**
-     * @param $a_job_id
+     * @param int $a_job_id
      * @return lfTestExportCronJob
      */
     public function getCronJobInstance($a_job_id) : lfTestExportCronJob

@@ -44,6 +44,7 @@ class lfTestResultExporter
      * @param int $test_ref_id
      * @return string
      * @throws ilDatabaseException
+     * @throws ilDateTimeException
      * @throws ilObjectNotFoundException
      */
     protected function exportItem(int $test_ref_id) : string
@@ -186,12 +187,12 @@ class lfTestResultExporter
     }
 
     /**
-     * @param           $a_usr_id
+     * @param int $a_usr_id
      * @param ilObjTest $tst
-     * @return array|int|string
+     * @return string
      * @throws ilDateTimeException
      */
-    protected function readPassTimestamp($a_usr_id, ilObjTest $tst)
+    protected function readPassTimestamp(int $a_usr_id, ilObjTest $tst) : string
     {
         global $ilDB;
         
@@ -214,9 +215,9 @@ class lfTestResultExporter
     }
 
     /**
-     * @return lfTestResultSettings|lfTestExportSettings|null
+     * @return lfTestExportSettings|null
      */
-    protected function getSettings()
+    protected function getSettings() : ?lfTestExportSettings
     {
         return $this->settings;
     }

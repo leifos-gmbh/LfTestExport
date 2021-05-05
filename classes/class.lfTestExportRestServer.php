@@ -19,7 +19,7 @@ class lfTestExportRestServer extends App
     private $plugin = null;
 
     /**
-     * @var lfTestResultSettings|null
+     * @var lfTestExportSettings|null
      */
     private $settings = null;
 
@@ -33,7 +33,7 @@ class lfTestExportRestServer extends App
      * @param string $api_key
      * @param array  $container
      */
-    public function __construct(string  $api_key, array $container = [])
+    public function __construct(string $api_key, array $container = [])
     {
         $this->api_key = $api_key;
         $this->plugin = ilLfTestExportPlugin::getInstance();
@@ -113,7 +113,7 @@ class lfTestExportRestServer extends App
      */
     public function getTestResultVersions(Request $request, Response $response, array $args) : Response
     {
-        $this->logger->info('Called get  test result versions.');
+        $this->logger->info('Called get test result versions.');
 
         if (!$this->isAuthenticated($request, $response)) {
             return $response;

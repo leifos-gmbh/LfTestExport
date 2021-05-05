@@ -49,9 +49,9 @@ class lfTestExportCronJob extends ilCronJob
 	}
 
     /**
-     * @return array|int
+     * @return int
      */
-    public function getDefaultScheduleValue() : array|int
+    public function getDefaultScheduleValue() : int
 	{
 		return $this->getPlugin()->getSettings()->getInterval();
 	}
@@ -59,7 +59,7 @@ class lfTestExportCronJob extends ilCronJob
     /**
      * @return bool
      */
-    public function hasAutoActivation()
+    public function hasAutoActivation() : bool
 	{
 		return false;
 	}
@@ -67,7 +67,7 @@ class lfTestExportCronJob extends ilCronJob
     /**
      * @return bool
      */
-    public function hasFlexibleSchedule()
+    public function hasFlexibleSchedule() : bool
 	{
 		return false;
 	}
@@ -75,7 +75,7 @@ class lfTestExportCronJob extends ilCronJob
     /**
      * @return bool
      */
-    public function hasCustomSettings()
+    public function hasCustomSettings() : bool
 	{
 		return false;
 	}
@@ -83,7 +83,7 @@ class lfTestExportCronJob extends ilCronJob
     /**
      * @return ilCronJobResult
      */
-    public function run()
+    public function run() : ilCronJobResult
 	{				
 		ilLoggerFactory::getLogger('lftest')->info('Starting test export...');
 		$exporter = new lfTestResultExporter();

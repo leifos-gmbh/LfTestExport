@@ -53,18 +53,13 @@ class lfTestExportRestHandler
      */
     public function initIlias()
     {
-        global $DIC;
         $this->parseRequest();
 
-        $getParams = $DIC->http()->request()->getQueryParams();
+        $_COOKIE['client_id'] = $_GET['client_id'] = $this->api_key_client_id;
 
-        $_COOKIE['client_id'] = $getParams['client_id'] = $this->api_key_client_id;
-
-        include_once './Services/Init/classes/class.ilInitialisation.php';
-        include_once 'Services/Context/classes/class.ilContext.php';
         ilContext::init(ilContext::CONTEXT_REST);
 
-        \ilInitialisation::initILIAS();
+        ilInitialisation::initILIAS();
     }
 
     /**
