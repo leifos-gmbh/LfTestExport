@@ -57,8 +57,9 @@ class lfTestExportRestHandler
 
         $_COOKIE['client_id'] = $_GET['client_id'] = $this->api_key_client_id;
 
+        include_once './Services/Context/classes/class.ilContext.php';
+        include_once './Services/Init/classes/class.ilInitialisation.php';
         ilContext::init(ilContext::CONTEXT_REST);
-
         ilInitialisation::initILIAS();
     }
 
