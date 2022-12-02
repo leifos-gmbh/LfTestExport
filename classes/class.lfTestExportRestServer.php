@@ -5,6 +5,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Http\StatusCode;
 use GuzzleHttp\Psr7\LazyOpenStream;
+use GuzzleHttp\Psr7\Utils;
 
 class lfTestExportRestServer extends App
 {
@@ -29,6 +30,11 @@ class lfTestExportRestServer extends App
     private $api_key = '';
 
     /**
+     * @var lfLPStatusRequestHandler
+     */
+    private $lp_status_handler;
+
+    /**
      * lfTestExportRestServer constructor.
      * @param string $api_key
      * @param array  $container
@@ -39,6 +45,7 @@ class lfTestExportRestServer extends App
         $this->plugin = ilLfTestExportPlugin::getInstance();
         $this->logger = $this->plugin->getLogger();
         $this->settings = $this->plugin->getSettings();
+        $this->lp_status_handler = (new lfLPStatusRequestInitiator())->initHandler($this->logger);
 
         parent::__construct($container);
     }
@@ -56,6 +63,8 @@ class lfTestExportRestServer extends App
         $this->DELETE('/test-results/{ID}/versions/{VERSION_ID:[0-9_]+}', [$callback, 'deleteTestResultVersion']);
         $this->GET('/test-results/{ID}/versions/latest', [$callback, 'getLatestTestResultVersion']);
         $this->DELETE('/test-results/{ID}/versions/latest', [$callback, 'deleteLatestTestResultVersion']);
+
+        $this->GET('/object-status/{REF_ID}', [$callback, 'getObjLPStatus']);
     }
 
     /**
@@ -211,6 +220,38 @@ class lfTestExportRestServer extends App
         return $response
             ->withStatus(StatusCode::HTTP_OK)
             ->withJson($file_info->getIds());
+    }
+
+    /**
+     * @param Request  $request
+     * @param Response $response
+     * @param array    $args
+     * @return Response
+     */
+    public function getObjLPStatus(Request $request, Response $response, array $args) : Response
+    {
+        $ref_id = (int) $args['REF_ID'];
+
+        $this->logger->info('Called get object LP status.');
+        if (!$this->isAuthenticated($request, $response)) {
+            return $response;
+        }
+
+        try {
+            $xml = $this->lp_status_handler->getObjectLPStatusXML($ref_id);
+        } catch (lfLPStatusException $e) {
+            $this->logger->warning($e->getMessage());
+            return $response->withStatus(StatusCode::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logger->warning($e->getMessage());
+            return $response->withStatus(StatusCode::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $xml_stream = Utils::streamFor($xml);
+
+        return $response
+            ->withHeader('Content-Type', 'application/xml')
+            ->withBody($xml_stream);
     }
 
     /**

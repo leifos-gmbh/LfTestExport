@@ -59,7 +59,11 @@ class lfTestExportRestHandler
 
         include_once './Services/Context/classes/class.ilContext.php';
         include_once './Services/Init/classes/class.ilInitialisation.php';
-        ilContext::init(ilContext::CONTEXT_REST);
+        /*
+         * CONTEXT_WEBDAV is necessary instead of CONTEXT_REST, because
+         * ilUser is needed in the DIC.
+         */
+        ilContext::init(ilContext::CONTEXT_WEBDAV);
         ilInitialisation::initILIAS();
     }
 
@@ -87,7 +91,10 @@ class lfTestExportRestHandler
 
     public function handleRequest()
     {
-        $server = new lfTestExportRestServer($this->api_key);
+        $server = new lfTestExportRestServer(
+            $this->api_key,
+            ['settings' => ['displayErrorDetails' => true]]
+        );
         $server->init();
         $server->run();
     }
