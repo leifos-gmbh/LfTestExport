@@ -13,10 +13,11 @@ class lfLPStatusObjectInfos
     private $object_lp;
 
     public function __construct(
-        int $ref_id,
-        lfLPStatusObjectFactory $factory
+        ilObject $object,
+        ilObjectLP $object_lp
     ) {
-        $this->fetchObject($ref_id, $factory);
+        $this->object = $object;
+        $this->object_lp = $object_lp;
     }
 
     public function refId(): int
@@ -62,27 +63,5 @@ class lfLPStatusObjectInfos
     public function LPModeInfo(): string
     {
         return (string) $this->object_lp->getModeInfoText($this->LPModeId());
-    }
-
-    private function fetchObject(
-        int $ref_id,
-        lfLPStatusObjectFactory $factory
-    ): void {
-        try {
-            $object = $factory->object($ref_id);
-            $object_lp = $factory->objectLP($object->getId());
-        } catch (ilObjectNotFoundException $e) {
-            throw new lfNoObjectWithThatRefIdException($ref_id);
-        }
-
-        if (!$object_lp->isActive()) {
-            throw new lfObjectWithDeactivatedLPException($ref_id);
-        }
-        if ($object_lp->isAnonymized()) {
-            throw new lfObjectWithAnonymizedLPException($ref_id);
-        }
-
-        $this->object = $object;
-        $this->object_lp = $object_lp;
     }
 }

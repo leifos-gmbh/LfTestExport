@@ -2,27 +2,19 @@
 
 class lfLPStatusInfosFactory
 {
-    /**
-     * @var lfLPStatusObjectFactory
-     */
-    private $obj_factory;
-
-    public function __construct(lfLPStatusObjectFactory $obj_factory)
-    {
-        $this->obj_factory = $obj_factory;
-    }
-
-    public function objectInfos(int $ref_id): lfLPStatusObjectInfos
-    {
-        return new lfLPStatusObjectInfos($ref_id, $this->obj_factory);
+    public function objectInfos(
+        ilObject $object,
+        ilObjectLP $object_lp
+    ): lfLPStatusObjectInfos {
+        return new lfLPStatusObjectInfos($object, $object_lp);
     }
 
     public function userInfos(
-        int $usr_id,
+        ilObjUser $user,
         lfLPStatusUserLPInfos $lp_infos
     ): lfLPStatusUserInfos {
         return new lfLPStatusUserInfos(
-            new lfLPStatusUserPersonalInfos($usr_id, $this->obj_factory),
+            new lfLPStatusUserPersonalInfos($user),
             $lp_infos
         );
     }

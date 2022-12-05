@@ -11,9 +11,8 @@ class lfLPStatusRequestInitiator
         return new lfLPStatusRequestHandler(
             new lfLPStatusXmlAuthor(
                 new lfLPStatusInfosFinder(
-                    new lfLPStatusInfosFactory(
-                        new lfLPStatusObjectFactory()
-                    ),
+                    new lfLPStatusInfosFactory(),
+                    new lfLPStatusObjectFactory(),
                     new lfLPStatusTableDataExtractor(
                         $DIC->database(),
                         new lfLPStatusUserLPInfosFactory(),

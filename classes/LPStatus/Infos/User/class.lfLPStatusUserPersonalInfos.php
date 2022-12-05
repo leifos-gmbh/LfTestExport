@@ -8,10 +8,9 @@ class lfLPStatusUserPersonalInfos
     private $user;
 
     public function __construct(
-        int $usr_id,
-        lfLPStatusObjectFactory $factory
+        ilObjUser $user
     ) {
-        $this->fetchUser($usr_id, $factory);
+        $this->user = $user;
     }
 
     public function usrId(): int
@@ -42,19 +41,6 @@ class lfLPStatusUserPersonalInfos
     public function email(): string
     {
         return (string) $this->user->getEmail();
-    }
-
-    private function fetchUser(
-        int $usr_id,
-        lfLPStatusObjectFactory $factory
-    ): void {
-        try {
-            $user = $factory->user($usr_id);
-        } catch (Exception $e) {
-            throw new lfInvalidUserException($usr_id);
-        }
-
-        $this->user = $user;
     }
 }
 

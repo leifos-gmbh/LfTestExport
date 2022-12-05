@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Learning Progress Information for the Object with RefId 102-->
+<ObjectLPStatus RefId="102" ObjId="358" Type="crs" Online="">
+  <Title>
+    Kurs mit Lernfortschritt
+  </Title>
+  <Description>
+    Dieser Kurs hat Lernfortschritt.
+  </Description>
+  <LPMode>
+    <Mode>
+      Status wird anhand einer Auswahl von Objekten bestimmt
+    </Mode>
+    <Info>
+      Der Status des Lernfortschritts des Objekts wird automatisch durch den Status der ausgewählten Objekten bestimmt. &lt;br /&gt;Nach dem Speichern dieser Einstellung können auf dieser Seite die gewünschten Objekte ausgewählt werden.
+    </Info>
+  </LPMode>
+  <Users>
+    <UserLPStatus UsrId="6" ADLogin="" DisplayName="root">
+      <LPStatus>
+        In Bearbeitung
+      </LPStatus>
+      <Percentage>
+        -
+      </Percentage>
+      <Mark>
+      </Mark>
+      <Remark>
+      </Remark>
+      <Personal FirstName="root" LastName="user" E-Mail="ilias@yourserver.com"/>
+      <Statistics AccessCount="187" FirstAccess="2022-06-01T12:43:10+00:00" LastAccess="2022-12-05T08:44:23+00:00" LastStatusChange="2022-07-07T16:28:48+00:00"/>
+    </UserLPStatus>
+    <UserLPStatus UsrId="369" ADLogin="" DisplayName="tim">
+      <LPStatus>
+        In Bearbeitung
+      </LPStatus>
+      <Percentage>
+        -
+      </Percentage>
+      <Mark>
+        sehr gut
+      </Mark>
+      <Remark>
+        wirklich sehr gut
+      </Remark>
+      <Personal FirstName="Tim" LastName="Schmitz" E-Mail="schmitz@leifos.de"/>
+      <Statistics AccessCount="17" FirstAccess="2022-06-09T15:12:32+00:00" LastAccess="2022-08-12T15:12:11+00:00" LastStatusChange="2022-07-07T16:28:09+00:00"/>
+    </UserLPStatus>
+    <UserLPStatus UsrId="370" ADLogin="" DisplayName="auchtim">
+      <LPStatus>
+        In Bearbeitung
+      </LPStatus>
+      <Percentage>
+        -
+      </Percentage>
+      <Mark>
+      </Mark>
+      <Remark>
+      </Remark>
+      <Personal FirstName="Tim" LastName="Schmitz" E-Mail="schmitz@leifos.de"/>
+      <Statistics AccessCount="8" FirstAccess="2022-06-09T15:15:32+00:00" LastAccess="2022-08-16T15:14:42+00:00" LastStatusChange="2022-11-04T13:13:32+00:00"/>
+    </UserLPStatus>
+    <UserLPStatus UsrId="374" ADLogin="" DisplayName="tom">
+      <LPStatus>
+        In Bearbeitung
+      </LPStatus>
+      <Percentage>
+        -
+      </Percentage>
+      <Mark>
+      </Mark>
+      <Remark>
+      </Remark>
+      <Personal FirstName="Tom" LastName="Schmitz" E-Mail="schmitz@leifos.de"/>
+      <Statistics AccessCount="10" FirstAccess="2022-06-09T15:26:22+00:00" LastAccess="2022-06-10T13:41:48+00:00" LastStatusChange="2022-07-07T16:28:09+00:00"/>
+    </UserLPStatus>
+  </Users>
+</ObjectLPStatus>

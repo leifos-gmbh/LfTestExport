@@ -5,7 +5,12 @@ class lfLPStatusInfosFinder
     /**
      * @var lfLPStatusInfosFactory
      */
-    private $factory;
+    private $infos_factory;
+
+    /**
+     * @var lfLPStatusObjectFactory
+     */
+    private $object_factory;
 
     /**
      * @var lfLPStatusTableDataExtractor
@@ -18,11 +23,13 @@ class lfLPStatusInfosFinder
     private $logger;
 
     public function __construct(
-        lfLPStatusInfosFactory $factory,
+        lfLPStatusInfosFactory $infos_factory,
+        lfLPStatusObjectFactory $object_factory,
         lfLPStatusTableDataExtractor $extractor,
         ilLogger $logger
     ) {
-        $this->factory = $factory;
+        $this->infos_factory = $infos_factory;
+        $this->object_factory = $object_factory;
         $this->extractor = $extractor;
         $this->logger = $logger;
     }
@@ -30,14 +37,17 @@ class lfLPStatusInfosFinder
     public function getInfosCollection(
         int $ref_id
     ): lfLPStatusInfosCollection {
-        $object_infos = $this->factory->objectInfos($ref_id);
+        $object_infos = $this->infos_factory->objectInfos(
+            $object = $this->fetchObject($ref_id),
+            $this->fetchObjectLP($object->getId(), $ref_id)
+        );
         $user_infos_cache = $this->extractor->fetchUsersLPInfos($object_infos);
 
         $user_infos = [];
         foreach ($user_infos_cache->allInfos() as $user_lp_infos) {
             try {
-                $user_infos[] = $this->factory->userInfos(
-                    $user_lp_infos->usrId(),
+                $user_infos[] = $this->infos_factory->userInfos(
+                    $this->fetchUser($user_lp_infos->usrId()),
                     $user_lp_infos
                 );
             } catch (Exception $e) {
@@ -48,9 +58,42 @@ class lfLPStatusInfosFinder
             }
         }
 
-        return $this->factory->infosCollection(
+        return $this->infos_factory->infosCollection(
             $object_infos,
             ...$user_infos
         );
+    }
+
+    private function fetchObject(int $ref_id): ilObject {
+        try {
+            $object = $this->object_factory->object($ref_id);
+        } catch (ilObjectNotFoundException $e) {
+            throw new lfNoObjectWithThatRefIdException($ref_id);
+        }
+
+        return $object;
+    }
+
+    private function fetchObjectLP(int $obj_id, int $ref_id): ilObjectLP {
+        $object_lp = $this->object_factory->objectLP($obj_id);
+
+        if (!$object_lp->isActive()) {
+            throw new lfObjectWithDeactivatedLPException($ref_id);
+        }
+        if ($object_lp->isAnonymized()) {
+            throw new lfObjectWithAnonymizedLPException($ref_id);
+        }
+
+        return $object_lp;
+    }
+
+    private function fetchUser(int $usr_id): ilObjUser {
+        try {
+            $user = $this->object_factory->user($usr_id);
+        } catch (Exception $e) {
+            throw new lfInvalidUserException($usr_id);
+        }
+
+        return $user;
     }
 }
