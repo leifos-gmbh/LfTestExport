@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT ObjectLPStatus (Title,Description,LPMode,Users)>
+<!ATTLIST ObjectLPStatus
+        RefId CDATA #REQUIRED <!-- integer -->
+        ObjId CDATA #REQUIRED <!-- integer -->
+        Type CDATA #REQUIRED <!-- three letter abbreviation, e.g. grp -->
+        Online CDATA #REQUIRED>
+
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT Description (#PCDATA)>
+
+<!ELEMENT LPMode (Mode,Info)>
+
+<!--
+    Translated learning progress mode
+-->
+<!ELEMENT Mode (#PCDATA)>
+
+<!--
+    Translated info about the learning progress mode
+-->
+<!ELEMENT Info (#PCDATA)>
+
+<!ELEMENT Users (UserLPStatus*)>
+<!ELEMENT UserLPStatus (LPStatus,Percentage,Mark,Remark,Personal,Statistics)>
+<!ATTLIST UserLPStatus
+        UsrId CDATA #REQUIRED <!-- integer -->
+        ADLogin CDATA #REQUIRED <!-- external account -->
+        DisplayName CDATA #REQUIRED> <!-- login/username -->
+
+<!--
+    Translated learning progress status of the user
+-->
+<!ELEMENT LPStatus (#PCDATA)>
+
+<!--
+    Completion percentage of the user as an integer. If not applicable, shows '-'.
+-->
+<!ELEMENT Percentage (#PCDATA)>
+<!ELEMENT Mark (#PCDATA)>
+<!ELEMENT Remark (#PCDATA)>
+
+<!ELEMENT Personal EMPTY>
+<!ATTLIST Personal
+        FirstName CDATA #REQUIRED
+        LastName CDATA #REQUIRED
+        E-Mail CDATA #REQUIRED>
+
+<!ELEMENT Statistics EMPTY>
+<!ATTLIST Statistics
+        AccessCount CDATA #REQUIRED <!-- integer -->
+        FirstAccess CDATA #REQUIRED <!-- date formatted as Y-m-d\TH:i:sP -->
+        LastAccess CDATA #REQUIRED <!-- date formatted as Y-m-d\TH:i:sP -->
+        LastStatusChange CDATA #REQUIRED> <!-- date formatted as Y-m-d\TH:i:sP -->
