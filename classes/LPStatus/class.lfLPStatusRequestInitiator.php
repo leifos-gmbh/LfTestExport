@@ -15,6 +15,7 @@ class lfLPStatusRequestInitiator
                     new lfLPStatusObjectFactory(),
                     new lfLPStatusTableDataExtractor(
                         $DIC->database(),
+                        $DIC->repositoryTree(),
                         new lfLPStatusUserLPInfosFactory(),
                         new lfLPStatusDatetimeFactory(),
                         new lfLPStatusPercentageUtilities()
