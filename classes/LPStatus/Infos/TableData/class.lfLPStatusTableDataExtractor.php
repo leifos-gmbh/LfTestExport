@@ -46,7 +46,7 @@ class lfLPStatusTableDataExtractor
     ): lfLPStatusUserLPInfosCache {
         $percentage_available = $this->percentage_utilities->isAvailable($object_infos);
         try {
-            $participants = $this->getParticipantsForObject($object_infos);
+            $participants = $this->getParticipantsForObject($object_infos->refId());
         } catch (Exception $e) {
             throw new lfLPStatusException(
                 'Could not determine participants of object with ref_id ' . $object_infos->refId() .
@@ -90,11 +90,10 @@ class lfLPStatusTableDataExtractor
      * be changed as well.
      * @return int[]
      */
-    protected function getParticipantsFOrObject(lfLPStatusObjectInfos $object_infos): array
+    protected function getParticipantsFOrObject(int $ref_id): array
     {
-        $ref_id = $object_infos->refId();
-        $obj_id = $object_infos->objId();
-        $obj_type = $object_infos->type();
+        $obj_id = ilObject::_lookupObjectId($ref_id);
+        $obj_type = ilObject::_lookupType($obj_id);
 
         $members = [];
 
